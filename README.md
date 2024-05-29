@@ -1,7 +1,7 @@
 # Solidity (Cheat Sheet)
 
 > [!NOTE]  
-> This is a cheat sheet on Foundry (mostly notes-to-self). They are incomplete by default.
+> This is a cheat sheet on Solidity (mostly notes-to-self). They are incomplete by default.
 
 ## Mappings
 
