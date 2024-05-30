@@ -31,11 +31,11 @@ Arrays in Solidity are a fundamental data structure used to store collections of
 
 1.  they can be either **fixed-size** or **dynamic**. **Fixed-size arrays** have a constant length
     defined at compile time, while **dynamic arrays** can change size at runtime.
-1.  they can support various types of elements, including **primitive types** like `uint` and `address`,
-    as well as **user-defined types** such as structs.
-1.  they can be stored in **storage** or **memory**. **Storage arrays** are stored permanently on the
-    blockchain, making them expensive to modify due to gas costs. **Memory arrays** are temporary
-    and only exist during the execution of a function, making them cheaper to use.
+1.  they can support various types of elements, including **primitive types** like `uint` and
+    `address`, as well as **user-defined types** such as structs.
+1.  they can be stored in **storage** or **memory**. **Storage arrays** are stored permanently on
+    the blockchain, making them expensive to modify due to gas costs. **Memory arrays** are
+    temporary and only exist during the execution of a function, making them cheaper to use.
 1.  they can be indexed, iterated over, and manipulated using familiar operations from other
     programming languages.
 
@@ -170,3 +170,43 @@ Arrays in Solidity are a fundamental data structure used to store collections of
       }
   }
   ```
+
+## Compiler warnings
+
+### Warning (2462): Visibility for constructor is ignored.
+
+Source: ChatGPT
+
+This warning indicates that specifying visibility for a constructor in Solidity is unnecessary and
+is ignored by the compiler. In Solidity versions 0.7.0 and later, constructors are implicitly
+`internal`, meaning they can only be called within the contract itself or derived contracts, making
+the visibility keyword redundant.
+
+In your code, the constructor of the `RegistryIntegrationTest` contract is marked with `public`
+visibility. To resolve this warning, simply remove the visibility keyword from the constructor.
+
+```diff
+- constructor() public {
++ constructor() {
+  // constructor body
+}
+```
+
+### Warning (2018): Function state mutability can be restricted to view
+
+Source: ChatGPT
+
+This warning suggests that the state mutability of a function could be restricted to `view` if the
+function does not modify the state of the blockchain. A `view` function promises not to alter the
+state, which allows the Ethereum Virtual Machine (EVM) to optimize how it handles the function.
+
+In your code, the function `test_shouldHaveAddressInRegistry` does not modify any state; it only
+reads from the registry and logs some information. To resolve this warning, change the function's
+mutability to `view` to explicitly state that it does not alter the state.
+
+```diff
+- function test_shouldHaveAddressInRegistry() public {
++ function test_shouldHaveAddressInRegistry() public view {
+  // function body
+}
+```
