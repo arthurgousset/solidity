@@ -3,6 +3,28 @@
 > [!NOTE]  
 > This is a cheat sheet on Solidity (mostly notes-to-self). They are incomplete by default.
 
+## Strings
+
+### Concatenating strings
+
+Source: [medium.com](https://medium.com/@jamaltheatlantean/how-to-concatenate-two-strings-using-solidity-fada6051b1a6)
+
+In Solidity <=0.8.11:
+
+```sol
+string(abi.encodePacked("a", "b"))
+```
+
+`abi.encodePacked()` takes two strings and returns a single-byte type array.
+`string()` converts the byte array to a string.
+
+In Solidity >=0.8.12:
+
+```sol
+string.concat("a", "b")
+```
+
+
 ## Mappings
 
 Source: ChatGPT
