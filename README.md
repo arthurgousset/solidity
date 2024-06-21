@@ -7,7 +7,8 @@
 
 ### Concatenating strings
 
-Source: [medium.com](https://medium.com/@jamaltheatlantean/how-to-concatenate-two-strings-using-solidity-fada6051b1a6)
+Source:
+[medium.com](https://medium.com/@jamaltheatlantean/how-to-concatenate-two-strings-using-solidity-fada6051b1a6)
 
 In Solidity <=0.8.11:
 
@@ -15,15 +16,14 @@ In Solidity <=0.8.11:
 string(abi.encodePacked("a", "b"))
 ```
 
-`abi.encodePacked()` takes two strings and returns a single-byte type array.
-`string()` converts the byte array to a string.
+`abi.encodePacked()` takes two strings and returns a single-byte type array. `string()` converts the
+byte array to a string.
 
 In Solidity >=0.8.12:
 
 ```sol
 string.concat("a", "b")
 ```
-
 
 ## Mappings
 
@@ -192,6 +192,71 @@ Arrays in Solidity are a fundamental data structure used to store collections of
       }
   }
   ```
+
+## Function visibility
+
+Source:
+[soliditylang.org](https://docs.soliditylang.org/en/latest/contracts.html#function-visibility)
+
+Solidity knows two kinds of function calls: external ones that do create an actual EVM message call
+and internal ones that do not. Furthermore, internal functions can be made inaccessible to derived
+contracts. This gives rise to four types of visibility for functions.
+
+1. `external`: External functions are part of the contract interface, which means they can be called
+   from other contracts and via transactions. An external function `f` cannot be called internally
+   (i.e. `f()` does not work, but `this.f()` works).
+
+1. `public`: Public functions are part of the contract interface and can be either called internally
+   or via message calls.
+
+1. `internal`: Internal functions can only be accessed from within the current contract or contracts
+   deriving from it. They cannot be accessed externally. Since they are not exposed to the outside
+   through the contract's ABI, they can take parameters of internal types like mappings or storage
+   references.
+
+1. `private`: Private functions are like internal ones but they are not visible in derived
+   contracts.
+
+1. (not visibility) `pure`: Pure functions promise not to read from or modify the state. In
+   particular, it should be possible to evaluate a `pure` function at compile-time given only its
+   inputs and `msg.data`, but without any knowledge of the current blockchain state. This means that
+   reading from `immutable` variables can be a non-pure operation.
+
+`view` functions are a combination of `pure` and `constant` (deprecated). They promise not to modify
+the state, but they can read from it.
+
+## Modifier
+
+`_;` is a placeholder for the function body. It is used to execute the function body after the
+modifier code is executed.
+
+## `require` and `revert`
+
+Source: [Alchemy.com](https://www.alchemy.com/overviews/solidity-require)
+
+The revert statement is similar to the require statement in that the revert function can handle
+the same error types as the require function, but it is more appropriate for complex logic gates.
+If a revert statement is called, the unused gas is returned and the state reverts to its original
+state.
+
+## Proxy/Implementation pattern
+
+Storage variables are declared in the implementation contract, but stored in the proxy contract. The
+proxy contract delegates all calls to the implementation contract and forwards all state variables
+to the implementation contract.
+
+That means that the implementation contract can be upgraded without losing the state variables, but
+the storage variables can only be extended, not modified, else the state variables will be lost in
+the proxy contract.
+
+Rules:
+
+1. adding new storage variables is fine, as long as they are added at the end of the storage layout
+1. renaming storage variables without changing the type is fine, as long as the order is the same.
+1. deleting storage variables is not allowed
+
+Recall, the storage layout is the order in which the storage variables are declared in the contract.
+The storage layout is important because it determines the storage **slot** of each variable.
 
 ## Compiler warnings
 
